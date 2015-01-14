@@ -1,0 +1,30 @@
+TREE is optional list-of
+	LINE
+	with-delimiter NEW-LINE
+
+LINE is
+	optional INDENT
+	optional NODES
+
+NODES is
+	optional list-of NAME
+	optional VALUE
+	with-delimiter SPACE
+
+NAME is list-of byte except SPECIAL
+
+VALUE is
+	VALUE-PREFIX
+	optional list-of byte except NEW-LINE
+
+SPECIAL is any-of
+	NEW-LINE
+	VALUE-PREFIX
+	INDENT
+	SPACE
+
+NEW-LINE is octet =0D
+INDENT is list-of octet =09
+VALUE-PREFIX is octet =3D
+SPACE is list-of octet =20
+

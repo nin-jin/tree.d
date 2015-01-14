@@ -74,9 +74,9 @@ class Tree {
 		return output;
 	}
 
-	Tree select( string path ) {
+	Tree select( string[] path ) {
 		Tree[] next = [ this ];
-		foreach( string name ; path.split(" ") ) {
+		foreach( string name ; path ) {
 			if( !next.length ) break;
 			Tree[] prev = next;
 			next = [];
@@ -89,6 +89,10 @@ class Tree {
 			}
 		}
 		return new Tree( "" , "" , next );
+	}
+
+	Tree select( string path ) {
+		return this.select( path.split( " " ) );
 	}
 
 	override string toString() {
