@@ -8,17 +8,17 @@ class Tree {
 
 	string name;
 	private string _value;
-	size_t[2] position;
+	string uri;
 	Tree[] childs;
 
-	this( string name = "" , string value = "" , Tree[] childs = [] , size_t[2] position = [0,0] ) {
+	this( string name = "" , string value = "" , Tree[] childs = [] , string uri = "" ) {
 		this.name = name;
 		this._value = value;
 		this.childs = childs;
-		this.position = position;
+		this.uri = uri;
 	}
 
-	static parse( string input ) {
+	static parse( string input , string uri = "" ) {
 		auto root = new Tree;
 		Tree[] stack = [ root ];
 
@@ -29,7 +29,7 @@ class Tree {
 		while( input.length ) {
 			auto name = munch( input , "^ \t\n=" );
 			if( name.length ) {
-				auto next = new Tree( name , "" , [] , [ row , col ] );
+				auto next = new Tree( name , "" , [] , uri ~ "#" ~ to!string( row ) ~ ":" ~ to!string( col ) );
 				col += name.length;
 				last.childs ~= next;
 				last = next;
@@ -37,7 +37,7 @@ class Tree {
 			} else {
 				if( input[0] == '=' ) {
 					auto value = munch( input , "^\n" )[1..$];
-					auto next = new Tree( "" , value , [] , [ row , col ] );
+					auto next = new Tree( "" , value , [] , uri ~ "#" ~ to!string( row ) ~ ":" ~ to!string( col ) );
 					last.childs ~= next;
 					last = next;
 				}
