@@ -12,6 +12,6 @@ Size                               |  3   |  1  |  4   |  5  |  5
 Streaming                          |  0   |  0  |  5   |  5  |  5
 Binary-safe                        |  0   |  0  |  0   |  0  |  5
 Universality                       |  4   |  3  |  3   |  1  |  5
-Prevalence                         |  5   |  5  |  3   |  4  |  0
+Prevalence                         |  5   |  5  |  3   |  3  |  0
 Text editors support               |  5   |  5  |  3   |  5  |  1
 Languages support                  |  4   |  5  |  3   |  5  |  1
