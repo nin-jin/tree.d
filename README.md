@@ -5,7 +5,7 @@ more - better                      | JSON | XML | YAML | INI | Tree
 -----------------------------------|------|-----|------|-----|-----
 Readability                        |  3   |  1  |  4   |  5  |  5
 Edit-friendly                      |  3   |  1  |  4   |  5  |  5
-Deep hierarhy                      |  3   |  3  |  3   |  1  |  5
+Deep hierarchy                     |  3   |  3  |  3   |  1  |  5
 Simple to implement                |  3   |  2  |  1   |  5  |  5
 Performance                        |  3   |  1  |  1   |  5  |  5
 Size                               |  3   |  1  |  4   |  5  |  5
