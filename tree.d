@@ -18,6 +18,10 @@ class Tree {
 		this.uri = uri;
 	}
 
+	Tree clone( Tree[] childs = [] ) {
+		return new Tree( this.name , this.vale , childs , this.uri );
+	}
+
 	static parse( string input , string uri = "" ) {
 		auto root = new Tree;
 		Tree[] stack = [ root ];
