@@ -18,8 +18,20 @@ class Tree {
 		this.uri = uri;
 	}
 
+	static Name( string name , Tree[] childs = [] , string uri = "" ) {
+		return new Tree( name , "" , childs , uri );
+	}
+
+	static Value( string value , Tree[] childs = [] , string uri = "" ) {
+		return new Tree( "" , value , childs , uri );
+	}
+
+	static List( Tree[] childs , string uri = "" ) {
+		return new Tree( "" , "" , childs , uri );
+	}
+
 	Tree clone( Tree[] childs = [] ) {
-		return new Tree( this.name , this.vale , childs , this.uri );
+		return new Tree( this.name , this.value , childs , this.uri );
 	}
 
 	static parse( string input , string uri = "" ) {
@@ -33,7 +45,7 @@ class Tree {
 		while( input.length ) {
 			auto name = munch( input , "^ \t\n=" );
 			if( name.length ) {
-				auto next = new Tree( name , "" , [] , uri ~ "#" ~ to!string( row ) ~ ":" ~ to!string( col ) );
+				auto next = Tree.Name( name , [] , uri ~ "#" ~ to!string( row ) ~ ":" ~ to!string( col ) );
 				col += name.length;
 				last.childs ~= next;
 				last = next;
@@ -41,7 +53,7 @@ class Tree {
 			} else {
 				if( input[0] == '=' ) {
 					auto value = munch( input , "^\n" )[1..$];
-					auto next = new Tree( "" , value , [] , uri ~ "#" ~ to!string( row ) ~ ":" ~ to!string( col ) );
+					auto next = Tree.Value( value , [] , uri ~ "#" ~ to!string( row ) ~ ":" ~ to!string( col ) );
 					last.childs ~= next;
 					last = next;
 				}
@@ -92,7 +104,7 @@ class Tree {
 				}
 			}
 		}
-		return new Tree( "" , "" , next );
+		return Tree.List( next );
 	}
 
 	Tree select( string path ) {
