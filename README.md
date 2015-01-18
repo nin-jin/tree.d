@@ -15,3 +15,5 @@ Universality                       |  4   |  3  |  3   |  1  |  5
 Prevalence                         |  5   |  5  |  3   |  3  |  0
 Text editors support               |  5   |  5  |  3   |  5  |  1
 Languages support                  |  4   |  5  |  3   |  5  |  1
+
+Syntax highlighting for IDEA: https://plugins.jetbrains.com/plugin/7459
