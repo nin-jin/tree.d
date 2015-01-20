@@ -1,12 +1,12 @@
 root
-    key =value
-    spaces =
+	key =value
+	spaces =
 root
-    very long hierarchy of nodes
-        multiline-content
-            =first
-            =second
+	very long hierarchy of nodes
+		multiline-content
+			=first
+			=second
 =root value
 =
-    =root
-    =value
+	=root
+	=value
