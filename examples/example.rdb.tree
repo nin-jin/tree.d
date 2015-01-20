@@ -1,0 +1,18 @@
+! City : table
+	ID : field
+		type : int =11
+		null : false
+		unique : true
+	Name : field
+		type : char =35
+		null : true
+		unique : false
+City
+	ID =1
+	Name =Kabul
+City
+	ID =4079
+	Name =Rafah
+City
+	ID =23023
+	Name =Moscow

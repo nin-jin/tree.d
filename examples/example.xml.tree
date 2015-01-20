@@ -1,0 +1,23 @@
+! DOCTYPE =html
+? xml
+	version =1.0
+	standalone =yes
+html
+	head
+		title =Страница!
+		style
+			@ rel =stylesheet
+			@ type =text/css
+			@ href =index.css
+		link
+			@ rel =canonical
+			@ href % uri
+				path =/
+				query
+					article =rock&roll
+					author  =Nin Jin
+	body
+		h1 =Страница!
+		-- TODO =Добавить описание страницы
+		hr
+		p =Какая-то страница

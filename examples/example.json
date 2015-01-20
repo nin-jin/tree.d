@@ -1,0 +1,12 @@
+{
+    "=a+b=c" : [
+        true
+    ],
+    "\"foo\"" : [
+        false,
+        -1.23
+    ],
+    "hello\nworld" : [
+        null
+    ]
+}

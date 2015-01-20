@@ -1,0 +1,8 @@
+function
+	name =getEl
+	arg =id
+	body return
+		get =document
+		call
+			name =getElementById
+			arg get =id

@@ -1,0 +1,12 @@
+message =Привет!!
+---
+arrival =Alice
+---
+message
+	from =Alice
+	=Привет!! Это я :-)
+---
+message
+	from =Jin
+	=Ну, привет, привет.
+---

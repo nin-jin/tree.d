@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<?xml
+	version="1.0"
+	standalone="yes"
+?>
+<html>
+	<head>
+		<title>Страница!</title>
+		<style
+			rel="stylesheet"
+			type="text/css"
+			href="index.css"
+		/>
+		<link
+			rel="canonical"
+			href="/?article=rock%26roll&amp;author=Nin+Jin"
+		/>
+	</head>
+	<body>
+		<h1>Страница!</h1>
+		<!--TODO Добавить описание страницы -->
+		<hr/>
+		<p>Какая-то страница</p>
+	</body>
+</html>
