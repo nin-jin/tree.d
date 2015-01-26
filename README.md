@@ -10,7 +10,7 @@ Simple to implement                |  3   |  2  |  1   |  5  |  5
 Performance                        |  3   |  1  |  1   |  5  |  5
 Size                               |  3   |  1  |  4   |  5  |  5
 Streaming                          |  0   |  0  |  5   |  5  |  5
-Binary-safe                        |  0   |  0  |  0   |  0  |  5
+Binary-safe                        |  2   |  0  |  0   |  0  |  5
 Universality                       |  4   |  3  |  3   |  1  |  5
 Prevalence                         |  5   |  5  |  3   |  3  |  0
 Text editors support               |  5   |  5  |  3   |  5  |  1
