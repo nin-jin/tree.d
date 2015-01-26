@@ -3,67 +3,117 @@ module jin.tree;
 import std.string;
 import std.conv;
 import std.outbuffer;
+import std.algorithm;
+import std.array;
 
 class Tree {
 
 	string name;
 	private string _value;
-	string uri;
+	string baseUri;
+	size_t row;
+	size_t col;
 	Tree[] childs;
 
-	this( string name = "" , string value = "" , Tree[] childs = [] , string uri = "" ) {
+	this(
+		 string name = "" ,
+		 string value = "" ,
+		 Tree[] childs = [] ,
+		 string baseUri = "" ,
+		 size_t row = 0 ,
+		 size_t col = 0 
+	) {
 		this.name = name;
 		this._value = value;
 		this.childs = childs;
-		this.uri = uri;
+		this.baseUri = baseUri;
+		this.row = row;
+		this.col = col;
 	}
 
-	static Name( string name , Tree[] childs = [] , string uri = "" ) {
-		return new Tree( name , "" , childs , uri );
+	static Name(
+		string name ,
+		Tree[] childs = [] ,
+		string baseUri = "" ,
+		size_t row = 0 ,
+		size_t col = 0
+	) {
+		return new Tree( name , "" , childs , baseUri , row , col );
 	}
 
-	static Value( string value , Tree[] childs = [] , string uri = "" ) {
-		return new Tree( "" , value , childs , uri );
+	static Values(
+		T = string
+	)(
+		T value ,
+		Tree[] childs = [] ,
+		string baseUri = "" ,
+		size_t row = 0 ,
+		size_t col = 0
+	) {
+		auto chunks = ( cast(string) value ).split( '\n' );
+		auto nodes = chunks.map!( chunk => new Tree( "" , chunk , [] , baseUri , row , col ) );
+		nodes[ $-1 ].childs = childs;
+		return nodes.array;
 	}
 
-	static List( Tree[] childs , string uri = "" ) {
-		return new Tree( "" , "" , childs , uri );
+	static List(
+		Tree[] childs ,
+		string baseUri = "" ,
+		size_t row = 0 ,
+		size_t col = 0
+	) {
+		return new Tree( "" , "" , childs , baseUri , row , col );
 	}
 
 	Tree clone( Tree[] childs = [] ) {
-		return new Tree( this.name , this.value , childs , this.uri );
+		return new Tree( this.name , this.value , childs , this.baseUri , this.row , this.col );
 	}
 
-	static parse( string input , string uri = "" ) {
-		auto root = new Tree;
+	static parse(
+		string input ,
+		string baseUri = "" ,
+		size_t row = 1 ,
+		size_t col = 1
+	) {
+		auto root = new Tree( "" , "" , [] , baseUri , row , col );
 		Tree[] stack = [ root ];
 
-		uint row = 1;
-		uint col = 1;
-
-		Tree last = root;
+		Tree parent = root;
 		while( input.length ) {
-			auto name = munch( input , "^ \t\n=" );
+
+			auto name = input.takeUntil( "\t\n =" );
 			if( name.length ) {
-				auto next = Tree.Name( name , [] , uri ~ "#" ~ to!string( row ) ~ ":" ~ to!string( col ) );
-				col += name.length;
-				last.childs ~= next;
-				last = next;
-				col += munch( input , " " ).length;
-			} else {
-				if( input[0] == '=' ) {
-					auto value = munch( input , "^\n" )[1..$];
-					auto next = Tree.Value( value , [] , uri ~ "#" ~ to!string( row ) ~ ":" ~ to!string( col ) );
-					last.childs ~= next;
-					last = next;
-				}
-				row += munch( input , "\n" ).length;
-				auto indent = munch( input , "\t" );
-				col = indent.length;
-				stack ~= last;
-				stack.length = indent.length + 1;
-				last = stack[$-1];
+				auto next = Tree.Name( name , [] , baseUri , row , col );
+				parent.childs ~= next;
+				parent = next;
+				col += name.length + input.take( " " ).length;
+				continue;
 			}
+			if( !input.length ) break;
+
+			if( input[0] == '=' ) {
+				auto value = input.takeUntil( "\n" )[ 1 .. $ ];
+				auto next = new Tree( "" , value , [] , baseUri , row , col );
+				parent.childs ~= next;
+				parent = next;
+			}
+			if( !input.length ) break;
+
+			if( input[0] != '\n' ) {
+				throw new Exception( "Unexpected symbol " ~ input[0] );
+			}
+			input = input[ 1 .. $ ];
+
+			auto indent = input.take( "\t" ).length;
+			if( indent > stack.length ) {
+				throw new Exception( "Too many TABs " ~ row.to!string ~ ":" ~ col.to!string );
+			}
+			col = indent + 1;
+			row += 1;
+
+			stack ~= parent;
+			stack.length  = indent + 1;
+			parent = stack[ indent ];
 		}
 
 		return root;
@@ -74,14 +124,17 @@ class Tree {
 			if( !prefix.length ) {
 				prefix = "\t";
 			}
-			output.write( this.name ~ " " );
+			output.write( this.name );
+			output.write( " " );
 			if( this.childs.length == 1 ) {
 				this.childs[0].pipe( output , prefix );
 				return output;
 			}
 			output.write( "\n" );
 		} else if( this._value.length || prefix.length ) {
-			output.write( "=" ~ this._value ~ "\n" );
+			output.write( "=" );
+			output.write( this._value );
+			output.write( "\n" );
 		}
 		foreach( Tree child ; this.childs ) {
 			output.write( prefix );
@@ -117,6 +170,10 @@ class Tree {
 		return buf.toString();
 	}
 
+	string uri( ) {
+		return this.baseUri ~ "#" ~ this.row.to!string ~ ":" ~ this.col.to!string;
+	}
+
 	T value( T = string )() {
 		string[] values;
 		foreach( Tree child ; this.childs ) {
@@ -137,3 +194,30 @@ class Tree {
 
 }
 
+string take( ref string input , string symbols ) {
+	auto res = "";
+	while( input.length ) {
+		auto symbol = input[0];
+		if( symbols.indexOf( symbol ) == -1 ) {
+			break;
+		} else {
+			res ~= symbol;
+			input = input[ 1 .. $ ];
+		}
+	}
+	return res;
+}
+
+string takeUntil( ref string input , string symbols ) {
+	auto res = "";
+	while( input.length ) {
+		auto symbol = input[0];
+		if( symbols.indexOf( symbol ) == -1 ) {
+			res ~= symbol;
+			input = input[ 1 .. $ ];
+		} else {
+			break;
+		}
+	}
+	return res;
+}
