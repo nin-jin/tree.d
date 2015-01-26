@@ -30,14 +30,25 @@ Simple queries:
     Tree userNamesValues = tree.select( "user name " ); // returns value-nodes
 ```
 
-Node api:
+Node info:
 ```d
     string name = userNames[0].name; // get node name
     string stringValue = userNames[0].value; // get value as string with "\n" as delimiter
     uint intValue =  userNames[0].value!uint; // get value converted from string to another type
 
     Tree[] childs = tree.childs; // get child nodes array
+    string baseUri = tree.baseUri; // get base uri like "http://example.org/source/uri"
+    size_t row = tree.row; // get row in source stream
+    size_t col = tree.col; // get column in source stream
     string uri = tree.uri; // get uri like "http://example.org/source/uri#3:2"
+```
+
+Nodes creation:
+```d
+	Tree values = Tree.Values( "foo\nbar" , [] );
+	Tree name = Tree.Name( "name" , values );
+	Tree list = Tree.List( [ name , name ] );
+	Tree firstLineName = name.clone( [ name[0] );
 ```
 
 Serialization:
