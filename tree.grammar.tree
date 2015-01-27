@@ -1,10 +1,9 @@
-TREE is optional list-of
-	LINE
-	with-delimiter NEW-LINE
+TREE is optional list-of LINE
 
 LINE is
 	optional INDENT
 	optional NODES
+	NEW-LINE
 
 NODES is
 	optional list-of NAME
