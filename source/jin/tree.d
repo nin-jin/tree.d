@@ -119,6 +119,19 @@ class Tree {
 		return root;
 	}
 
+	unittest {
+		assert( Tree.parse( "foo\nbar\n" ).length == 2 );
+		assert( Tree.parse( "foo\nbar\n" )[1].name == "bar" );
+		assert( Tree.parse( "foo\n\n\n" ).length == 1 );
+
+		assert( Tree.parse( "=foo\n=bar\n" ).length == 2 );
+		assert( Tree.parse( "=foo\n=bar\n" )[1].value == "bar" );
+
+		assert( Tree.parse( "foo bar =pol" )[0][0][0].value == "pol" );
+		assert( Tree.parse( "foo bar\n\t=pol\n\t=men" )[0][0][1].value == "men" );
+	}
+
+
 	OutputType pipe( OutputType )( OutputType output , string prefix = "" ) {
 		if( this.name.length ) {
 			if( !prefix.length ) {
@@ -195,29 +208,31 @@ class Tree {
 }
 
 string take( ref string input , string symbols ) {
-	auto res = "";
-	while( input.length ) {
-		auto symbol = input[0];
+	auto i = 0;
+	while( i < input.length ) {
+		auto symbol = input[i];
 		if( symbols.indexOf( symbol ) == -1 ) {
 			break;
 		} else {
-			res ~= symbol;
-			input = input[ 1 .. $ ];
+			i += 1;
 		}
 	}
+	auto res = input[ 0 .. i ];
+	input = input[ i .. $ ];
 	return res;
 }
 
 string takeUntil( ref string input , string symbols ) {
-	auto res = "";
-	while( input.length ) {
-		auto symbol = input[0];
+	auto i = 0;
+	while( i < input.length ) {
+		auto symbol = input[i];
 		if( symbols.indexOf( symbol ) == -1 ) {
-			res ~= symbol;
-			input = input[ 1 .. $ ];
+			i += 1;
 		} else {
 			break;
 		}
 	}
+	auto res = input[ 0 .. i ];
+	input = input[ i .. $ ];
 	return res;
 }
