@@ -5,6 +5,8 @@ import std.conv;
 import std.outbuffer;
 import std.algorithm;
 import std.array;
+import std.json;
+import std.xml;
 
 class Tree {
 
@@ -50,10 +52,27 @@ class Tree {
 		size_t row = 0 ,
 		size_t col = 0
 	) {
-		auto chunks = ( cast(string) value ).split( '\n' );
+		auto chunks = value.to!string.split( '\n' );
 		auto nodes = chunks.map!( chunk => new Tree( "" , chunk , [] , baseUri , row , col ) );
-		nodes[ $-1 ].childs = childs;
+		nodes[ $ - 1 ].childs = childs;
 		return nodes.array;
+	}
+
+	static Value(
+		T = string
+	)(
+		T value ,
+		Tree[] childs = [] ,
+		string baseUri = "" ,
+		size_t row = 0 ,
+		size_t col = 0
+	) {
+		auto values = Tree.Values( value , [] , baseUri , row , col );
+		auto res = values.length > 1
+			? new Tree( "" , "" , values , baseUri , row , col )
+			: values[0];
+		res.childs ~= childs;
+		return res;
 	}
 
 	static List(
@@ -131,6 +150,66 @@ class Tree {
 		assert( Tree.parse( "foo bar\n\t=pol\n\t=men" )[0][0][1].value == "men" );
 	}
 
+	static Tree fromJSON( string json ) {
+		return Tree.fromJSON( parseJSON( json ) );
+	}
+	static Tree fromJSON( JSONValue json ) {
+		switch( json.type ) {
+			case JSON_TYPE.FALSE :
+				return Tree.Name( "false" );
+			case JSON_TYPE.TRUE :
+				return Tree.Name( "true" );
+			case JSON_TYPE.NULL :
+				return Tree.Name( "null" );
+			case JSON_TYPE.FLOAT :
+				return Tree.Name( json.floating.to!string );
+			case JSON_TYPE.INTEGER :
+				return Tree.Name( json.integer.to!string );
+			case JSON_TYPE.UINTEGER :
+				return Tree.Name( json.uinteger.to!string );
+			case JSON_TYPE.STRING :
+				return Tree.Value( json.str );
+			case JSON_TYPE.ARRAY :
+				return Tree.Name( "list" , json.array.map!( json => Tree.fromJSON( json ) ).array );
+			case JSON_TYPE.OBJECT :
+				Tree[] childs = [];
+				foreach( key , value ; json.object ) {
+					childs ~= Tree.Value( key , [ Tree.Name( ":" , [ Tree.fromJSON( value ) ] ) ] );
+				}
+				return Tree.Name( "map" , childs );
+			default:
+				throw new Error( "Unsupported type: " ~ json.type );
+		}
+	}
+
+	static Tree fromXML( string xml ) {
+		return Tree.fromXML( new Document( xml ) );
+	}
+	static Tree fromXML( Item xml ) {
+
+		auto el = cast( Element ) xml;
+		if( el ) {
+			Tree[] attrs;
+			foreach( key , val ; el.tag.attr ){
+				attrs ~= Tree.Name( "@" , [ Tree.Name( key , Tree.Values( val ) ) ] );
+			}
+			auto childs = el.items.map!( Tree.fromXML ).filter!( a => a ).array;
+			return Tree.Name( el.tag.name , attrs ~ childs );
+		}
+
+		auto com = cast( Comment ) xml;
+		if( com ) {
+			return Tree.Name( "--" , Tree.Values( com.toString[ 4 .. $ - 3 ] ) );
+		}
+
+		auto txt = cast( Text ) xml;
+		if( txt ) {
+			if( txt.toString.all!( isSpace ) ) return null;
+			return Tree.Value( txt );
+		}
+
+		throw new Error( "Unsupported node type!" );
+	}
 
 	OutputType pipe( OutputType )( OutputType output , string prefix = "" ) {
 		if( this.name.length ) {

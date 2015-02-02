@@ -3,9 +3,9 @@
 	version="1.0"
 	standalone="yes"
 ?>
-<html>
+<html xmlns:x="x">
 	<head>
-		<title>Страница!</title>
+		<title>Welcome!</title>
 		<style
 			rel="stylesheet"
 			type="text/css"
@@ -16,10 +16,10 @@
 			href="/?article=rock%26roll&amp;author=Nin+Jin"
 		/>
 	</head>
-	<body>
-		<h1>Страница!</h1>
-		<!--TODO Добавить описание страницы -->
+	<body x:y="foo">
+		<h1>Welcome!</h1>
+		<!-- TODO add page description -->
 		<hr/>
-		<p>Какая-то страница</p>
+		<p>Some page content</p>
 	</body>
 </html>

@@ -2,22 +2,24 @@
 ? xml
 	version =1.0
 	standalone =yes
-html
-	head
-		title =Страница!
-		style
+html 
+	@ xmlns:x =x
+	head 
+		title =Welcome!
+		style 
 			@ rel =stylesheet
 			@ type =text/css
 			@ href =index.css
-		link
+		link 
 			@ rel =canonical
 			@ href % uri
 				path =/
 				query
 					article =rock&roll
 					author  =Nin Jin
-	body
-		h1 =Страница!
-		-- TODO =Добавить описание страницы
-		hr
-		p =Какая-то страница
+	body 
+		@ x:y =foo
+		h1 =Welcome!
+		-- = TODO add page description 
+		hr 
+		p =Some page content

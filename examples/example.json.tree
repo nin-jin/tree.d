@@ -1,12 +1,11 @@
-map
-	=a+b=c
-		: list true
+map 
+	==a+b=c
+		: list true 
 	="foo"
-		: list
-			false
-			-1.23
+		: list 
+			false 
+			-1.23 
 	=
 		=hello
 		=world
-			: list
-				null
+		: list null 
