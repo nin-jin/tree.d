@@ -1,10 +1,9 @@
 map 
 	==a+b=c
 		: list true 
-	="foo"
-		: list 
-			false 
-			-1.23 
+	"foo" : list 
+		false 
+		-1.23 
 	=
 		=hello
 		=world
