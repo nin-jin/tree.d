@@ -17,6 +17,7 @@ Text editors support               |  5   |  5  |  3   |  5  |  1
 Languages support                  |  4   |  5  |  3   |  5  |  1
 
 More info about format and tree-based languages: http://habrahabr.ru/post/248147/
+
 Syntax highlighting for IDEA: https://plugins.jetbrains.com/plugin/7459
 
 Parsing:
