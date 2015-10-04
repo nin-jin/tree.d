@@ -312,6 +312,10 @@ class Tree {
 		return this.childs.length;
 	}
 
+	size_t opDollar( ) {
+		return this.childs.length;
+	}
+
 }
 
 string take( ref string input , string symbols ) {
