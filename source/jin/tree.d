@@ -290,6 +290,10 @@ class Tree {
 		return buf.toString();
 	}
 
+	Tree expand() {
+		return this.clone([ Tree.Value( this.uri.relativePath , this.childs.map!( child => child.expand ).array ) ]);
+	}
+
 	string uri( ) {
 		return this.baseUri ~ "#" ~ this.row.to!string ~ ":" ~ this.col.to!string;
 	}
