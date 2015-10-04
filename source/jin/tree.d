@@ -1,5 +1,6 @@
 module jin.tree;
 
+import std.stdio;
 import std.string;
 import std.conv;
 import std.outbuffer;
@@ -99,7 +100,19 @@ class Tree {
 		if( !baseUri.length ) {
 			baseUri = absolutePath( input.name );
 		}
-		return Tree.parse( cast( string ) read( input ) , baseUri , row , col );
+		return Tree.parse( cast( string ) read( input.name ) , baseUri , row , col );
+	}
+
+	static parse(
+		File input ,
+		string baseUri = null ,
+		size_t row = 1 ,
+		size_t col = 1
+	) {
+		if( !baseUri.length ) {
+			baseUri = input.name.absolutePath.asNormalizedPath.array;
+		}
+		return Tree.parse( cast( string ) read( input.name ) , baseUri , row , col );
 	}
 
 	static parse(
@@ -269,22 +282,6 @@ class Tree {
 
 	Tree select( string path ) {
 		return this.select( path.split( " " ) );
-	}
-
-	Tree[] apply( Tree[] delegate( Tree ) [string] context ) {
-		if( this.name in context ) {
-			return context[ this.name ]( this );
-		}
-		if( "" in context ) {
-			return context[ "" ]( this );
-		}
-		return [
-			this.clone(
-				this.childs.map!(
-					child => child.apply( context )
-				).joiner.array
-			)
-		];
 	}
 
 	override string toString() {
