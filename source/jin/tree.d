@@ -88,7 +88,7 @@ class Tree {
 	}
 
 	Tree clone( Tree[] childs = [] ) {
-		return new Tree( this.name , this.value , childs , this.baseUri , this.row , this.col );
+		return new Tree( this.name , this._value , childs , this.baseUri , this.row , this.col );
 	}
 
 	static parse(
