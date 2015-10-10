@@ -87,8 +87,13 @@ class Tree {
 		return new TreeList( childs , baseUri , row , col );
 	}
 
-	Tree clone( Tree[] childs = [] ) {
-		return new Tree( this.name , this._value , childs , this.baseUri , this.row , this.col );
+	Tree clone( Tree[] childs = [] , string name = null ) {
+		if( !name ) name = this.name;
+		return new Tree( name , this._value , childs , this.baseUri , this.row , this.col );
+	}
+
+	Tree rename( string name ) {
+		return new Tree( name , this._value , this.childs , this.baseUri , this.row , this.col );
 	}
 
 	static parse(
