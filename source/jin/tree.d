@@ -84,7 +84,7 @@ class Tree {
 		size_t row = 0 ,
 		size_t col = 0
 	) {
-		return new Tree( "" , "" , childs , baseUri , row , col );
+		return new TreeList( childs , baseUri , row , col );
 	}
 
 	Tree clone( Tree[] childs = [] ) {
@@ -246,8 +246,8 @@ class Tree {
 			}
 			output.write( this.name );
 			output.write( " " );
-			if( this.childs.length == 1 ) {
-				this.childs[0].pipe( output , prefix );
+			if( this.length == 1 ) {
+				this[0].pipe( output , prefix );
 				return output;
 			}
 			output.write( "\n" );
@@ -324,6 +324,21 @@ class Tree {
 		return this.childs.length;
 	}
 
+}
+
+class TreeList : Tree {
+	alias childs this;
+	this(
+		 Tree[] childs = [] ,
+		 string baseUri = "" ,
+		 size_t row = 0 ,
+		 size_t col = 0 
+	) {
+		this.childs = childs;
+		this.baseUri = baseUri;
+		this.row = row;
+		this.col = col;
+	}
 }
 
 string take( ref string input , string symbols ) {
