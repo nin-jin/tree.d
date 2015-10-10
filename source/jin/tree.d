@@ -312,6 +312,10 @@ class Tree {
 		return this.childs[ index ];
 	}
 
+	Tree[] opSlice( size_t start , size_t end ) {
+		return this.childs[ start .. end ];
+	}
+
 	size_t length( ) {
 		return this.childs.length;
 	}
