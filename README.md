@@ -21,8 +21,8 @@ Languages support                  |  4   |  5  |  3   |  5  |  1
 Structural-nodes represents as names that can not contain `[\s\n=]`. Example of structural nodes:
 
 ```tree
-one-level second-level third-level
-one-level
+first-level second-level third-level
+first-level
 	first-of-second-level third-level
 	second-of-second-level
 ```
