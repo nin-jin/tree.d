@@ -2,7 +2,7 @@ function
 	name =getEl
 	arg =id
 	body return
-		get =document
 		call
+			obj get =document
 			name =getElementById
 			arg get =id
