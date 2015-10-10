@@ -16,23 +16,68 @@ Prevalence                         |  5   |  5  |  3   |  3  |  0
 Text editors support               |  5   |  5  |  3   |  5  |  1
 Languages support                  |  4   |  5  |  3   |  5  |  1
 
-More info about format and tree-based languages: http://habrahabr.ru/post/248147/
+## Short description
 
-Syntax highlighting for IDEA: https://plugins.jetbrains.com/plugin/7459
+Structural-nodes represents as names that can not contain `[\s\n=]`. Example of structural nodes:
 
-Parsing:
+```tree
+one-level second-level third-level
+one-level
+	first-of-second-level third-level
+	second-of-second-level
+```
+
+Indents must use tabs, lines must use unix line ends.
+
+Data-nodes represents as raw data between `[=]` and `[\n]` characters. Example
+
+```tree
+=hello
+=world
+=
+	=hello
+	=world
+```
+
+In one line may be any count of structural-nodes, but only one data-node at the end. 
+
+```tree
+article
+	title =Hello world
+	description
+		=This is demo of tree-format
+		=Cool! Is not it? :-)
+```
+
+[Grammar using grammar.tree language](./tree.grammar.tree)
+
+[More examples.](./examples/)
+
+[More info about format and tree-based languages (russian article).](http://habrahabr.ru/post/248147/)
+
+## IDE support
+
+* [SynWrite](http://www.uvviewsoft.com/synwrite/)
+* [Syntax highlighting for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7459)
+
+## D API
+
+### Parsing
+
 ```d
     string data = cast(string) read( "path/to/file.tree" ); // read from file
     Tree tree = Tree.parse( data , "http://example.org/source/uri" ); // parse to tree
 ```
 
-Simple queries:
+### Simple queries
+
 ```d
     Tree userNames = tree.select( "user name" ); // returns name-nodes
     Tree userNamesValues = tree.select( "user name " ); // returns value-nodes
 ```
 
-Node info:
+### Node info
+
 ```d
     string name = userNames[0].name; // get node name
     string stringValue = userNames[0].value; // get value as string with "\n" as delimiter
@@ -45,7 +90,8 @@ Node info:
     string uri = tree.uri; // get uri like "http://example.org/source/uri#3:2"
 ```
 
-Nodes creation:
+### Nodes creation
+
 ```d
 	Tree values = Tree.Values( "foo\nbar" , [] );
 	Tree name = Tree.Name( "name" , values );
@@ -53,7 +99,8 @@ Nodes creation:
 	Tree firstLineName = name.clone( [ name[0] );
 ```
 
-Serialization:
+### Serialization
+
 ```d
     string data = tree.toString(); // returns string representation of tree
     tree.pipe( stdout ); // prints tree to output buffer
