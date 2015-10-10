@@ -1,0 +1,15 @@
+# This is a TOML document.
+
+title = "TOML Example"
+epigraph = '''
+	Roses are red
+	Violets are blue
+'''
+
+[owner]
+dob = 1979-05-27T07:32:00-08:00 # First class dates
+
+[owner."my\ndatabase"]
+server = "192.168.1.1"
+numbers = [ 123, 12.34 ]
+enabled = true
