@@ -14,7 +14,7 @@ import std.path;
 class Tree {
 
 	string name;
-	private string _value;
+	protected string _value;
 	string baseUri;
 	size_t row;
 	size_t col;
@@ -120,6 +120,17 @@ class Tree {
 		return Tree.parse( cast( string ) read( input.name ) , baseUri , row , col );
 	}
 
+	unittest {
+		assert( Tree.parse( "foo\nbar\n" ).length == 2 );
+		assert( Tree.parse( "foo\nbar\n" )[1].name == "bar" );
+		assert( Tree.parse( "foo\n\n\n" ).length == 1 );
+
+		assert( Tree.parse( "=foo\n=bar\n" ).length == 2 );
+		assert( Tree.parse( "=foo\n=bar\n" )[1].value == "bar" );
+
+		assert( Tree.parse( "foo bar =pol" )[0][0][0].value == "pol" );
+		assert( Tree.parse( "foo bar\n\t=pol\n\t=men" )[0][0][1].value == "men" );
+	}
 	static parse(
 		string input ,
 		string baseUri = "" ,
@@ -151,7 +162,7 @@ class Tree {
 			if( !input.length ) break;
 
 			if( input[0] != '\n' ) {
-				throw new Exception( "Unexpected symbol " ~ input[0] );
+				throw new Exception( "Unexpected symbol (" ~ input[0] ~ ")" );
 			}
 			input = input[ 1 .. $ ];
 			col = 1;
@@ -169,18 +180,6 @@ class Tree {
 		}
 
 		return root;
-	}
-
-	unittest {
-		assert( Tree.parse( "foo\nbar\n" ).length == 2 );
-		assert( Tree.parse( "foo\nbar\n" )[1].name == "bar" );
-		assert( Tree.parse( "foo\n\n\n" ).length == 1 );
-
-		assert( Tree.parse( "=foo\n=bar\n" ).length == 2 );
-		assert( Tree.parse( "=foo\n=bar\n" )[1].value == "bar" );
-
-		assert( Tree.parse( "foo bar =pol" )[0][0][0].value == "pol" );
-		assert( Tree.parse( "foo bar\n\t=pol\n\t=men" )[0][0][1].value == "men" );
 	}
 
 	static Tree fromJSON( string json ) {
@@ -268,7 +267,7 @@ class Tree {
 		return output;
 	}
 
-	Tree select( string[] path ) {
+	auto select( string[] path ) {
 		Tree[] next = [ this ];
 		foreach( string name ; path ) {
 			if( !next.length ) break;
@@ -276,17 +275,13 @@ class Tree {
 			next = [];
 			foreach( Tree item ; prev ) {
 				foreach( Tree child ; item.childs ) {
-					if( child.name == name ) {
+					if( !name.length || child.name == name ) {
 						next ~= child;
 					}
 				}
 			}
 		}
 		return Tree.List( next );
-	}
-
-	Tree select( string path ) {
-		return this.select( path.split( " " ) );
 	}
 
 	override string toString() {
@@ -311,6 +306,14 @@ class Tree {
 			}
 		}
 		return to!T( this._value ~ values.join( "\n" ) );
+	}
+
+	unittest {
+		auto tree = Tree.parse( "foo =1\nbar =2" );
+		assert( tree["bar"][0].to!string == "bar =2\n" );
+	}
+	auto opIndex( string path ) {
+		return this.select( path.split( " " ) );
 	}
 
 	Tree opIndex( size_t index ) {
