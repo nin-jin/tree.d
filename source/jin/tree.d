@@ -14,138 +14,74 @@ import std.path;
 class Tree {
 
 	string name;
-	protected string _value;
+	string value;
 	string baseUri;
 	size_t row;
 	size_t col;
 	Tree[] childs;
 
 	this(
-		 string name = "" ,
-		 string value = "" ,
-		 Tree[] childs = [] ,
+		 string name ,
+		 string value ,
+		 Tree[] childs ,
 		 string baseUri = "" ,
 		 size_t row = 0 ,
 		 size_t col = 0 
 	) {
 		this.name = name;
-		this._value = value;
+		this.value = value;
 		this.childs = childs;
 		this.baseUri = baseUri;
 		this.row = row;
 		this.col = col;
 	}
 
-	static Name(
-		string name ,
-		Tree[] childs = [] ,
-		string baseUri = "" ,
-		size_t row = 0 ,
-		size_t col = 0
+	this (
+		  DirEntry input ,
+		  string baseUri = null ,
+		  size_t row = 1 ,
+		  size_t col = 1
 	) {
-		return new Tree( name , "" , childs , baseUri , row , col );
+		if( baseUri is null ) baseUri = absolutePath( input.name );
+		this( cast( string ) read( input.name ) , baseUri , row , col );
 	}
 
-	static Values(
-		T = string
-	)(
-		T value ,
-		Tree[] childs = [] ,
-		string baseUri = "" ,
-		size_t row = 0 ,
-		size_t col = 0
+	this (
+		  File input ,
+		  string baseUri = null ,
+		  size_t row = 1 ,
+		  size_t col = 1
 	) {
-		auto chunks = value.to!string.split( '\n' );
-		auto nodes = chunks.map!( chunk => new Tree( "" , chunk , [] , baseUri , row , col ) );
-		nodes[ $ - 1 ].childs = childs;
-		return nodes.array;
-	}
-
-	static Value(
-		T = string
-	)(
-		T value ,
-		Tree[] childs = [] ,
-		string baseUri = "" ,
-		size_t row = 0 ,
-		size_t col = 0
-	) {
-		auto values = Tree.Values( value , [] , baseUri , row , col );
-		auto res = values.length > 1
-			? new Tree( "" , "" , values , baseUri , row , col )
-			: values[0];
-		res.childs ~= childs;
-		return res;
-	}
-
-	static List(
-		Tree[] childs ,
-		string baseUri = "" ,
-		size_t row = 0 ,
-		size_t col = 0
-	) {
-		return new TreeList( childs , baseUri , row , col );
-	}
-
-	Tree clone( Tree[] childs = [] , string name = null ) {
-		if( !name ) name = this.name;
-		return new Tree( name , this._value , childs , this.baseUri , this.row , this.col );
-	}
-
-	Tree rename( string name ) {
-		return new Tree( name , this._value , this.childs , this.baseUri , this.row , this.col );
-	}
-
-	static parse(
-		DirEntry input ,
-		string baseUri = null ,
-		size_t row = 1 ,
-		size_t col = 1
-	) {
-		if( !baseUri.length ) {
-			baseUri = absolutePath( input.name );
-		}
-		return Tree.parse( cast( string ) read( input.name ) , baseUri , row , col );
-	}
-
-	static parse(
-		File input ,
-		string baseUri = null ,
-		size_t row = 1 ,
-		size_t col = 1
-	) {
-		if( !baseUri.length ) {
-			baseUri = input.name.absolutePath.asNormalizedPath.array;
-		}
-		return Tree.parse( cast( string ) read( input.name ) , baseUri , row , col );
+		if( baseUri is null ) baseUri = input.name.absolutePath.asNormalizedPath.array;
+		this( cast( string ) read( input.name ) , baseUri , row , col );
 	}
 
 	unittest {
-		assert( Tree.parse( "foo\nbar\n" ).length == 2 );
-		assert( Tree.parse( "foo\nbar\n" )[1].name == "bar" );
-		assert( Tree.parse( "foo\n\n\n" ).length == 1 );
+		assert( new Tree( "foo\nbar\n" , "" ).length == 2 );
+		assert( new Tree( "foo\nbar\n" , "" )[1].name == "bar" );
+		assert( new Tree( "foo\n\n\n" , "" ).length == 1 );
 
-		assert( Tree.parse( "=foo\n=bar\n" ).length == 2 );
-		assert( Tree.parse( "=foo\n=bar\n" )[1].value == "bar" );
+		assert( new Tree( "=foo\n=bar\n" , "" ).value == "foo\nbar" );
+		assert( new Tree( "=foo\n=bar\n" , "" ).length == 0 );
 
-		assert( Tree.parse( "foo bar =pol" )[0][0][0].value == "pol" );
-		assert( Tree.parse( "foo bar\n\t=pol\n\t=men" )[0][0][1].value == "men" );
+		assert( new Tree( "foo bar =pol" , "" )[0][0].value == "pol" );
+		assert( new Tree( "foo bar\n\t=pol\n\t=men" , "" )[0][0].value == "pol\nmen" );
 	}
-	static parse(
-		string input ,
-		string baseUri = "" ,
-		size_t row = 1 ,
-		size_t col = 1
+	this (
+		  string input ,
+		  string baseUri ,
+		  size_t row = 1 ,
+		  size_t col = 1
 	) {
-		auto root = new Tree( "" , "" , [] , baseUri , row , col );
-		Tree[] stack = [ root ];
+		this( "" , null , [] , baseUri , row , col );
+		Tree[] stack = [ this ];
 
-		Tree parent = root;
+		Tree parent = this;
 		while( input.length ) {
 
 			auto name = input.takeUntil( "\t\n =" );
 			if( name.length ) {
-				auto next = Tree.Name( name , [] , baseUri , row , col );
+				auto next = new Tree( name , null , [] , baseUri , row , col );
 				parent.childs ~= next;
 				parent = next;
 				col += name.length + input.take( " " ).length;
@@ -155,9 +91,8 @@ class Tree {
 
 			if( input[0] == '=' ) {
 				auto value = input.takeUntil( "\n" )[ 1 .. $ ];
-				auto next = new Tree( "" , value , [] , baseUri , row , col );
-				parent.childs ~= next;
-				parent = next;
+				if( parent.value is null ) parent.value = value;
+				else parent.value ~= "\n" ~ value;
 			}
 			if( !input.length ) break;
 
@@ -178,8 +113,24 @@ class Tree {
 			stack.length  = indent + 1;
 			parent = stack[ indent ];
 		}
+	}
 
-		return root;
+	Tree make(
+		string name = null ,
+		string value = null ,
+		Tree[] childs = null ,
+		string baseUri = null ,
+		size_t row = 0 ,
+		size_t col = 0 
+	) {
+		return new Tree(
+			name ? name : this.name ,
+			value ? value : this.value ,
+			childs ? childs : this.childs ,
+			baseUri ? baseUri : this.baseUri ,
+			row ? row : this.row ,
+			col ? col : this.col
+		);
 	}
 
 	static Tree fromJSON( string json ) {
@@ -188,27 +139,27 @@ class Tree {
 	static Tree fromJSON( JSONValue json ) {
 		switch( json.type ) {
 			case JSON_TYPE.FALSE :
-				return Tree.Name( "false" );
+				return new Tree( "false" , "" , [] );
 			case JSON_TYPE.TRUE :
-				return Tree.Name( "true" );
+				return new Tree( "true" , "" , [] );
 			case JSON_TYPE.NULL :
-				return Tree.Name( "null" );
+				return new Tree( "null" , "" , [] );
 			case JSON_TYPE.FLOAT :
-				return Tree.Name( json.floating.to!string );
+				return new Tree( "float" , json.floating.to!string , [] );
 			case JSON_TYPE.INTEGER :
-				return Tree.Name( json.integer.to!string );
+				return new Tree( "int" , json.integer.to!string , [] );
 			case JSON_TYPE.UINTEGER :
-				return Tree.Name( json.uinteger.to!string );
+				return new Tree( "int" , json.uinteger.to!string , [] );
 			case JSON_TYPE.STRING :
-				return Tree.Value( json.str );
+				return new Tree( "string" , json.str , [] );
 			case JSON_TYPE.ARRAY :
-				return Tree.Name( "list" , json.array.map!( json => Tree.fromJSON( json ) ).array );
+				return new Tree( "list" , "" , json.array.map!( json => Tree.fromJSON( json ) ).array );
 			case JSON_TYPE.OBJECT :
 				Tree[] childs = [];
 				foreach( key , value ; json.object ) {
-					childs ~= Tree.Value( key , [ Tree.Name( ":" , [ Tree.fromJSON( value ) ] ) ] );
+					childs ~= new Tree( "*" , key , [ new Tree( ":" , "" , [ Tree.fromJSON( value ) ] ) ] );
 				}
-				return Tree.Name( "map" , childs );
+				return new Tree( "map" , "" , childs );
 			default:
 				throw new Error( "Unsupported type: " ~ json.type );
 		}
@@ -223,51 +174,80 @@ class Tree {
 		if( el ) {
 			Tree[] attrs;
 			foreach( key , val ; el.tag.attr ){
-				attrs ~= Tree.Name( "@" , [ Tree.Name( key , Tree.Values( val ) ) ] );
+				attrs ~= new Tree( "@" , "" , [ new Tree( key , val ) ] );
 			}
 			auto childs = el.items.map!( Tree.fromXML ).filter!( a => a ).array;
-			return Tree.Name( el.tag.name , attrs ~ childs );
+			return new Tree( el.tag.name , "" , attrs ~ childs );
 		}
 
 		auto com = cast( Comment ) xml;
 		if( com ) {
-			return Tree.Name( "--" , Tree.Values( com.toString[ 4 .. $ - 3 ] ) );
+			return new Tree( "--" , com.to!string[ 4 .. $ - 3 ] , [] );
 		}
 
 		auto txt = cast( Text ) xml;
 		if( txt ) {
-			if( txt.toString.all!( isSpace ) ) return null;
-			return Tree.Value( txt );
+			if( txt.to!string.all!( isSpace ) ) return null;
+			return new Tree( "'" , com.to!string , [] );
 		}
 
 		throw new Error( "Unsupported node type!" );
 	}
 
-	OutputType pipe( OutputType )( OutputType output , string prefix = "" ) {
-		if( this.name.length ) {
-			if( !prefix.length ) {
-				prefix = "\t";
-			}
-			output.write( this.name );
-			output.write( " " );
-			if( this.length == 1 ) {
-				this[0].pipe( output , prefix );
-				return output;
-			}
+	OutputType pipe(
+		OutputType
+	) (
+		OutputType output ,
+		string prefix = ""
+	) {
+		if( this.name.length ) output.write( this.name ~ " " );
+
+		auto chunks = this.value.length ? this.value.split( "\n" ) : [];
+
+		if( chunks.length + this.childs.length == 1 ) {
+			if( chunks.length ) output.write( "=" ~ chunks[0] ~ "\n" );
+			else childs[0].pipe( output , prefix );
+		} else {
 			output.write( "\n" );
-		} else if( this._value.length || prefix.length ) {
-			output.write( "=" );
-			output.write( this._value );
-			output.write( "\n" );
+			if( this.name.length ) prefix ~= "\t";
+
+			foreach( chunk ; chunks ) output.write( prefix ~ "=" ~ chunk ~ "\n" );
+
+			foreach( child ; this.childs ) {
+				output.write( prefix );
+				child.pipe( output , prefix );
+			}
 		}
-		foreach( Tree child ; this.childs ) {
-			output.write( prefix );
-			child.pipe( output , prefix ~ "\t" );
-		}
+
 		return output;
 	}
 
-	auto select( string[] path ) {
+	override string toString() {
+		OutBuffer buf = new OutBuffer;
+		this.pipe( buf );
+		return buf.to!string;
+	}
+
+	Tree expand() {
+		return this.make( null , null , [ new Tree( "@" , this.uri , [] ) ] ~ this.childs.map!( child => child.expand ).array );
+	}
+
+	string uri( ) {
+		return this.baseUri ~ "#" ~ this.row.to!string ~ ":" ~ this.col.to!string;
+	}
+
+	unittest {
+		auto tree = new Tree( "foo =1\nbar =2" , "" );
+		assert( tree["bar"][0].to!string == "bar =2\n" );
+	}
+	auto opIndex( string path ) {
+		return this[ path.split( " " ) ];
+	}
+
+	unittest {
+		assert( new Tree( "foo bar =2" , "" )[ [ "foo" , "bar" ] ].to!string == "bar =2\n" );
+	}
+	auto opIndex( string[] path ) {
 		Tree[] next = [ this ];
 		foreach( string name ; path ) {
 			if( !next.length ) break;
@@ -275,45 +255,12 @@ class Tree {
 			next = [];
 			foreach( Tree item ; prev ) {
 				foreach( Tree child ; item.childs ) {
-					if( !name.length || child.name == name ) {
-						next ~= child;
-					}
+					if( child.name != name ) continue;
+					next ~= child;
 				}
 			}
 		}
-		return Tree.List( next );
-	}
-
-	override string toString() {
-		OutBuffer buf = new OutBuffer;
-		this.pipe( buf );
-		return buf.toString();
-	}
-
-	Tree expand() {
-		return this.clone([ Tree.Value( this.uri.relativePath , this.childs.map!( child => child.expand ).array ) ]);
-	}
-
-	string uri( ) {
-		return this.baseUri ~ "#" ~ this.row.to!string ~ ":" ~ this.col.to!string;
-	}
-
-	T value( T = string )() {
-		string[] values;
-		foreach( Tree child ; this.childs ) {
-			if( !child.name.length ) {
-				values ~= child.value;
-			}
-		}
-		return to!T( this._value ~ values.join( "\n" ) );
-	}
-
-	unittest {
-		auto tree = Tree.parse( "foo =1\nbar =2" );
-		assert( tree["bar"][0].to!string == "bar =2\n" );
-	}
-	auto opIndex( string path ) {
-		return this.select( path.split( " " ) );
+		return new Tree( "" , "" , next );
 	}
 
 	Tree opIndex( size_t index ) {
@@ -332,21 +279,6 @@ class Tree {
 		return this.childs.length;
 	}
 
-}
-
-class TreeList : Tree {
-	alias childs this;
-	this(
-		 Tree[] childs = [] ,
-		 string baseUri = "" ,
-		 size_t row = 0 ,
-		 size_t col = 0 
-	) {
-		this.childs = childs;
-		this.baseUri = baseUri;
-		this.row = row;
-		this.col = col;
-	}
 }
 
 string take( ref string input , string symbols ) {

@@ -3,3 +3,5 @@ docs.json
 __dummy.html
 *.o
 *.obj
+/*.exe
+/dub.selections.json

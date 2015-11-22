@@ -1,5 +1,0 @@
-name "jin-tree"
-description "Tree - simple fast compact user-readable binary-safe extensible structural format"
-license "public domain"
-authors "jin"
-
