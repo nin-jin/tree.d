@@ -1,6 +1,8 @@
 # Tree
 Simple fast compact user-readable binary-safe extensible structural format.
 
+[![Build Status](https://travis-ci.org/nin-jin/tree.d.svg?branch=master)](https://travis-ci.org/nin-jin/tree.d)
+
 more - better                      | JSON | XML | YAML | INI | Tree
 -----------------------------------|------|-----|------|-----|-----
 Readability                        |  3   |  1  |  4   |  5  |  5
