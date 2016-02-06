@@ -61,6 +61,7 @@ article
 
 * [SynWrite](http://www.uvviewsoft.com/synwrite/)
 * [Syntax highlighting for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7459)
+* [Syntax highlighting for Atom](https://github.com/nin-jin/atom-language-tree)
 
 ## D API
 
