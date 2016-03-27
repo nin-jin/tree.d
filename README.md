@@ -63,6 +63,10 @@ article
 * [Syntax highlighting for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7459)
 * [Syntax highlighting for Atom](https://github.com/nin-jin/atom-language-tree)
 
+## Realizations
+
+* [TypeScript](https://github.com/nin-jin/pms-jin/tree/master/tree2)
+
 ## D API
 
 ### Parsing
