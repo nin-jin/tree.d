@@ -1,13 +1,11 @@
 map 
-	*
-		==a+b=c
+	==a+b=c
 		: list true 
-	*
-		="foo"
+	="foo"
 		: list 
 			false 
 			float =-1.23 
-	*
+	=
 		=hello
 		=world
 		: list null 
