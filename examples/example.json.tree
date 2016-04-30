@@ -1,4 +1,4 @@
-map 
+dict
 	==a+b=c
 		: list true 
 	="foo"
