@@ -6,24 +6,24 @@ LINE is
 	NEW-LINE
 
 NODES is
-	optional list-of NAME
-	optional VALUE
+	optional list-of SYMBOL
+	optional DATA
 	with-delimiter SPACE
 
-NAME is list-of byte except SPECIAL
+SYMBOL is list-of byte except SPECIAL
 
-VALUE is
-	VALUE-PREFIX
+DATA is
+	DATA-PREFIX
 	optional list-of byte except NEW-LINE
 
 SPECIAL is any-of
 	NEW-LINE
-	VALUE-PREFIX
+	DATA-PREFIX
 	INDENT
 	SPACE
 
-NEW-LINE is octet =0A
-INDENT is list-of octet =09
-VALUE-PREFIX is octet =3D
-SPACE is list-of octet =20
+NEW-LINE is octet \0A
+INDENT is list-of octet \09
+DATA-PREFIX is octet \5C
+SPACE is list-of octet \20
 
