@@ -20,7 +20,7 @@ Languages support                  |  4   |  5  |  3   |  5  |  1
 
 ## Short description
 
-Structural-nodes represents as names that can not contain `[\s\n=]`. Example of structural nodes:
+Structural-nodes represents as names that can not contain `[\s\n\\]`. Example of structural nodes:
 
 ```tree
 first-level second-level third-level
