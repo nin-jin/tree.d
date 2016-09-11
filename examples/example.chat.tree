@@ -1,12 +1,12 @@
-message =Привет!!
+message \Привет!!
 ---
-arrival =Alice
----
-message
-	from =Alice
-	=Привет!! Это я :-)
+arrival \Alice
 ---
 message
-	from =Jin
-	=Ну, привет, привет.
+	from \Alice
+	\Привет!! Это я :-)
+---
+message
+	from \Jin
+	\Ну, привет, привет.
 ---

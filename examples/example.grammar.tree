@@ -22,8 +22,8 @@ SPECIAL is any-of
 	INDENT
 	SPACE
 
-NEW-LINE is octet =0A
-INDENT is list-of octet =09
-VALUE-PREFIX is octet =3D
-SPACE is list-of octet =20
+NEW-LINE is octet \0A
+INDENT is list-of octet \09
+VALUE-PREFIX is octet \3D
+SPACE is list-of octet \20
 

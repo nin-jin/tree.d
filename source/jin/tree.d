@@ -61,11 +61,11 @@ class Tree {
 		assert( new Tree( "foo\nbar\n" , "" )[1].name == "bar" );
 		assert( new Tree( "foo\n\n\n" , "" ).length == 1 );
 
-		assert( new Tree( "=foo\n=bar\n" , "" ).value == "foo\nbar" );
-		assert( new Tree( "=foo\n=bar\n" , "" ).length == 0 );
+		assert( new Tree( "\\foo\n\\bar\n" , "" ).value == "foo\nbar" );
+		assert( new Tree( "\\foo\n\\bar\n" , "" ).length == 0 );
 
-		assert( new Tree( "foo bar =pol" , "" )[0][0].value == "pol" );
-		assert( new Tree( "foo bar\n\t=pol\n\t=men" , "" )[0][0].value == "pol\nmen" );
+		assert( new Tree( "foo bar \\pol" , "" )[0][0].value == "pol" );
+		assert( new Tree( "foo bar\n\t\\pol\n\t\\men" , "" )[0][0].value == "pol\nmen" );
 	}
 	this (
 		  string input ,
@@ -79,7 +79,7 @@ class Tree {
 		Tree parent = this;
 		while( input.length ) {
 
-			auto name = input.takeUntil( "\t\n =" );
+			auto name = input.takeUntil( "\t\n \\" );
 			if( name.length ) {
 				auto next = new Tree( name , null , [] , baseUri , row , col );
 				parent.childs ~= next;
@@ -89,7 +89,7 @@ class Tree {
 			}
 			if( !input.length ) break;
 
-			if( input[0] == '=' ) {
+			if( input[0] == '\\' ) {
 				auto value = input.takeUntil( "\n" )[ 1 .. $ ];
 				if( parent.value is null ) parent.value = value;
 				else parent.value ~= "\n" ~ value;
@@ -159,7 +159,7 @@ class Tree {
 				foreach( key , value ; json.object ) {
 					childs ~= new Tree( "*" , key , [ new Tree( ":" , "" , [ Tree.fromJSON( value ) ] ) ] );
 				}
-				return new Tree( "map" , "" , childs );
+				return new Tree( "dict" , "" , childs );
 			default:
 				throw new Error( "Unsupported type: " ~ json.type );
 		}
@@ -205,13 +205,13 @@ class Tree {
 		auto chunks = this.value.length ? this.value.split( "\n" ) : [];
 
 		if( chunks.length + this.childs.length == 1 ) {
-			if( chunks.length ) output.write( "=" ~ chunks[0] ~ "\n" );
+			if( chunks.length ) output.write( "\\" ~ chunks[0] ~ "\n" );
 			else childs[0].pipe( output , prefix );
 		} else {
 			output.write( "\n" );
 			if( this.name.length ) prefix ~= "\t";
 
-			foreach( chunk ; chunks ) output.write( prefix ~ "=" ~ chunk ~ "\n" );
+			foreach( chunk ; chunks ) output.write( prefix ~ "\\" ~ chunk ~ "\n" );
 
 			foreach( child ; this.childs ) {
 				output.write( prefix );
@@ -237,15 +237,15 @@ class Tree {
 	}
 
 	unittest {
-		auto tree = new Tree( "foo =1\nbar =2" , "" );
-		assert( tree["bar"][0].to!string == "bar =2\n" );
+		auto tree = new Tree( "foo \\1\nbar \\2" , "" );
+		assert( tree["bar"][0].to!string == "bar \\2\n" );
 	}
 	auto opIndex( string path ) {
 		return this[ path.split( " " ) ];
 	}
 
 	unittest {
-		assert( new Tree( "foo bar =2" , "" )[ [ "foo" , "bar" ] ].to!string == "bar =2\n" );
+		assert( new Tree( "foo bar \\2" , "" )[ [ "foo" , "bar" ] ].to!string == "bar \\2\n" );
 	}
 	auto opIndex( string[] path ) {
 		Tree[] next = [ this ];

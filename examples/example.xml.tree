@@ -1,25 +1,25 @@
-! DOCTYPE =html
+! DOCTYPE \html
 ? xml
-	version =1.0
-	standalone =yes
+	version \1.0
+	standalone \yes
 html 
-	@ xmlns:x =x
+	@ xmlns:x \x
 	head 
-		title =Welcome!
+		title \Welcome!
 		style 
-			@ rel =stylesheet
-			@ type =text/css
-			@ href =index.css
+			@ rel \stylesheet
+			@ type \text/css
+			@ href \index.css
 		link 
-			@ rel =canonical
+			@ rel \canonical
 			@ href % uri
-				path =/
+				path \/
 				query
-					article =rock&roll
-					author  =Nin Jin
+					article \rock&roll
+					author  \Nin Jin
 	body 
-		@ x:y =foo
-		h1 =Welcome!
-		-- = TODO add page description 
+		@ x:y \foo
+		h1 \Welcome!
+		-- \TODO add page description 
 		hr 
-		p =Some page content
+		p \Some page content

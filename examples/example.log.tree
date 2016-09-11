@@ -1,16 +1,16 @@
 access
-	time =2035-28-07 13:08:24
-	url =/favicon.png
-	ip =8.8.8.8
+	time \2035-28-07 13:08:24
+	url \/favicon.png
+	ip \8.8.8.8
 access
-	time =2035-28-07 13:08:26
-	url =/favicon.ico
-	ip =8.8.8.8
+	time \2035-28-07 13:08:26
+	url \/favicon.ico
+	ip \8.8.8.8
 access
-	time =2036-28-07 13:08:26
-	url =/favicon.ico
-	ip =8.8.8.8
+	time \2036-28-07 13:08:26
+	url \/favicon.ico
+	ip \8.8.8.8
 access
-	time =2035-28-08 13:08:26
-	url =/favicon.ico
+	time \2035-28-08 13:08:26
+	url \/favicon.ico
 	ip =8.8.8.8

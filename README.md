@@ -31,24 +31,24 @@ first-level
 
 Indents must use tabs, lines must use unix line ends.
 
-Data-nodes represents as raw data between `[=]` and `[\n]` characters. Example
+Data-nodes represents as raw data between `[\\]` and `[\n]` characters. Example
 
 ```tree
-=hello
-=world
-=
-	=hello
-	=world
+\hello
+\world
+\
+	\hello
+	\world
 ```
 
 In one line may be any count of structural-nodes, but only one data-node at the end. 
 
 ```tree
 article
-	title =Hello world
+	title \Hello world
 	description
-		=This is demo of tree-format
-		=Cool! Is not it? :-)
+		\This is demo of tree-format
+		\Cool! Is not it? :-)
 ```
 
 [Grammar using grammar.tree language](./tree.grammar.tree)
@@ -65,7 +65,7 @@ article
 
 ## Implementations
 
-* [TypeScript](https://github.com/nin-jin/pms-jin/tree/master/tree2)
+* [TypeScript](https://github.com/eigenmethod/mol/tree/master/tree)
 
 ## D API
 
