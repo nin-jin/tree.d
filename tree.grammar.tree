@@ -1,18 +1,18 @@
 TREE is optional list-of LINE
 
-LINE is
+LINE is sequence
 	optional INDENT
 	optional NODES
 	NEW-LINE
 
-NODES is
+NODES is sequence
 	optional list-of SYMBOL
 	optional DATA
 	with-delimiter SPACE
 
 SYMBOL is list-of byte except SPECIAL
 
-DATA is
+DATA is sequence
 	DATA-PREFIX
 	optional list-of byte except NEW-LINE
 
