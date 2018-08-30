@@ -1,11 +1,11 @@
-dict
+*
 	\=a+b=c
-		: list true 
+		: / true 
 	\"foo"
-		: list 
+		: / 
 			false 
-			float \-1.23
+			-1.23
 	\
 		\hello
 		\world
-		: list null 
+		: / null 
