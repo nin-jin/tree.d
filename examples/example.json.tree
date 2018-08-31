@@ -1,11 +1,11 @@
 *
 	\=a+b=c
-		: / true 
+		/ true 
 	\"foo"
-		: / 
+		/ 
 			false 
 			-1.23
 	\
 		\hello
 		\world
-		: / null 
+		/ null 
