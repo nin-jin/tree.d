@@ -63,6 +63,7 @@ article
 * [Syntax highlighting for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7459)
 * [Syntax highlighting for Atom](https://github.com/nin-jin/atom-language-tree)
 * [Syntax highlighting for Visual Studio Code](https://github.com/nin-jin/vscode-language-tree)
+* [Syntax highlighting for Sublime](https://github.com/yurybikuzin/Smol-sublime)
 
 ## Implementations
 
