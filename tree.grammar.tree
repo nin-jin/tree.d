@@ -1,29 +1,32 @@
-TREE is optional list-of LINE
+tree .is .optional .list_of line
 
-LINE is sequence
-	optional INDENT
-	optional NODES
-	NEW-LINE
+line .is .sequence
+	.optional indent
+	.optional nodes
+	new_line
 
-NODES is sequence
-	optional list-of SYMBOL
-	optional DATA
-	with-delimiter SPACE
+nodes .is .sequence
+	.optional .list_of struct
+	.optional data
+	.with_delimiter space
 
-SYMBOL is list-of byte except SPECIAL
+struct .is .list_of .byte
+	.except special
+```
 
-DATA is sequence
-	DATA-PREFIX
-	optional list-of byte except NEW-LINE
+```tree
+data .is .sequence
+	data_prefix
+	.optional .list_of .byte
+		.except new_line
 
-SPECIAL is any-of
-	NEW-LINE
-	DATA-PREFIX
-	INDENT
-	SPACE
+special .is .any_of
+	new_line
+	data_prefix
+	indent
+	space
 
-NEW-LINE is octet \0A
-INDENT is list-of octet \09
-DATA-PREFIX is octet \5C
-SPACE is list-of octet \20
-
+new_line .is .byte \0A
+indent .is .list_of .byte \09
+data_prefix .is .byte \5C
+space .is .list_of .byte \20
