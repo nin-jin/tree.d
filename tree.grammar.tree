@@ -12,9 +12,7 @@ nodes .is .sequence
 
 struct .is .list_of .byte
 	.except special
-```
 
-```tree
 data .is .sequence
 	data_prefix
 	.optional .list_of .byte
