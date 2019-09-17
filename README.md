@@ -14,9 +14,9 @@ Size                               |  3   |  1  |  4   |  5  |  5
 Streaming                          |  0   |  0  |  5   |  5  |  5
 Binary-safe                        |  2   |  0  |  0   |  0  |  5
 Universality                       |  4   |  3  |  3   |  1  |  5
-Prevalence                         |  5   |  5  |  3   |  3  |  0
-Text editors support               |  5   |  5  |  3   |  5  |  1
-Languages support                  |  4   |  5  |  3   |  5  |  1
+Prevalence                         |  5   |  5  |  3   |  3  |  1
+Text editors support               |  5   |  5  |  3   |  5  |  3
+Languages support                  |  4   |  5  |  3   |  5  |  2
 
 ## Short description
 
@@ -51,11 +51,13 @@ article
 		\Cool! Is not it? :-)
 ```
 
-[Grammar using grammar.tree language](./tree.grammar.tree)
+[Grammar using grammar.tree language](https://github.com/nin-jin/tree.d/wiki/grammar.tree)
+
+[Tree based languages](https://github.com/nin-jin/tree.d/wiki/Tree-based-languages)
 
 [More examples.](./examples/)
 
-[More info about format and tree-based languages (russian article).](http://habrahabr.ru/post/248147/)
+[More info about format and tree-based languages (russian slides).](https://github.com/nin-jin/slides/tree/master/tree)
 
 ## IDE support
 
@@ -65,7 +67,7 @@ article
 * [Syntax highlighting for Visual Studio Code](https://github.com/nin-jin/vscode-language-tree)
 * [Syntax highlighting for Sublime](https://github.com/yurybikuzin/Smol-sublime)
 
-## Implementations
+## Other implementations
 
 * [TypeScript](https://github.com/eigenmethod/mol/tree/master/tree)
 
