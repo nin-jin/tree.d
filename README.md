@@ -61,10 +61,10 @@ article
 
 ## IDE support
 
+* [Language Service for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=valikov.tree-language-service)
 * [SynWrite](http://www.uvviewsoft.com/synwrite/)
 * [Syntax highlighting for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7459)
 * [Syntax highlighting for Atom](https://github.com/nin-jin/atom-language-tree)
-* [Syntax highlighting for Visual Studio Code](https://github.com/nin-jin/vscode-language-tree)
 * [Syntax highlighting for Sublime](https://github.com/yurybikuzin/Smol-sublime)
 
 ## Other implementations
