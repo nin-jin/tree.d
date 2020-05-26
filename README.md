@@ -71,6 +71,10 @@ article
 
 * [TypeScript](https://github.com/eigenmethod/mol/tree/master/tree)
 
+## Similar formats
+
+- [Tree Notation](https://github.com/treenotation/faq.treenotation.org)
+
 ## D API
 
 ### Parsing
@@ -116,7 +120,3 @@ article
     string data = tree.toString(); // returns string representation of tree
     tree.pipe( stdout ); // prints tree to output buffer
 ```
-
-### Similar formats
-
-- [Tree Notation](https://github.com/treenotation/faq.treenotation.org)
