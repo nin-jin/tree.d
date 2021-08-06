@@ -72,7 +72,7 @@ article
 
 ## Other implementations
 
-* [TypeScript](https://github.com/eigenmethod/mol/tree/master/tree)
+* [TypeScript](https://github.com/eigenmethod/mol/tree/master/tree2)
 
 ## Similar formats
 
