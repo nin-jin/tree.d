@@ -86,7 +86,7 @@ article
 
 ```d
     string data = cast(string) read( "path/to/file.tree" ); // read from file
-    Tree tree = Tree.parse( data , "http://example.org/source/uri" ); // parse to tree
+    Tree tree = new Tree( data , "http://example.org/source/uri" ); // parse to tree
 ```
 
 ### Simple queries
@@ -125,3 +125,42 @@ article
     string data = tree.toString(); // returns string representation of tree
     tree.pipe( stdout ); // prints tree to output buffer
 ```
+
+# Benchmarks
+
+```d
+module jin.bench;
+
+void main() {
+	
+	import std.datetime.stopwatch, std.json, jin.tree, std.stdio, std.file;
+	
+	string dataTree = cast(string) read( "formats/sample.tree" );
+	string dataJson = cast(string) read( "formats/sample.json" );
+	
+	Tree tree;
+	JSONValue json;
+	
+	void measureTree() {
+    	tree = new Tree( dataTree , "formats/sample.tree" );
+	}
+	
+	void measureJson() {
+    	json = parseJSON( dataJson );
+	}
+	
+	auto res = benchmark!( measureTree, measureJson )(100);
+	
+	res.writeln;
+}
+```
+
+```sh
+rdmd source/bench --build=release
+```
+
+## Parse
+
+| jin.tree | std.json
+|----------|---------
+| 204      | 372
