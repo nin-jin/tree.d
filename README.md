@@ -129,8 +129,6 @@ article
 # Benchmarks
 
 ```d
-module jin.bench;
-
 void main() {
 	
 	import std.datetime.stopwatch, std.json, jin.tree, std.stdio, std.file;
