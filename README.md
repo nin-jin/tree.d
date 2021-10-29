@@ -59,9 +59,12 @@ article
 
 [More examples.](./examples/)
 
-[More info about format and tree-based languages (russian slides).](https://github.com/nin-jin/slides/tree/master/tree)
-
 [Online sandbox](https://tree.hyoo.ru/)
+
+## Performances
+
+- [Tree - единый AST чтобы править всеми](https://github.com/nin-jin/slides/tree/master/tree) - more info about format and tree-based languages
+- [Что не так с сорсмапами и как с ними не связываться?](https://github.com/nin-jin/slides/tree/master/sourcemap) - using tree for DSL with sourcemaps
 
 ## IDE support
 
