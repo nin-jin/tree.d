@@ -160,7 +160,7 @@ void main() {
 rdmd source/bench --build=release
 ```
 
-## Parse
+## Parse Time
 
 | jin.tree | std.json
 |----------|---------
