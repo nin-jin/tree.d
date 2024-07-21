@@ -1,5 +1,5 @@
 # Tree
-Simple fast compact user-readable binary-safe extensible structural format.
+Simple fast compact user-readable binary-safe extensible structural format. Read more in a [detailed overview](https://hackernoon.com/tree-ast-which-crushes-json-xml-yaml-toml-etc).
 
 [![Build Status](https://travis-ci.org/nin-jin/tree.d.svg?branch=master)](https://travis-ci.org/nin-jin/tree.d)
 
